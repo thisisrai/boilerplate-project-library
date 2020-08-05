@@ -47,6 +47,10 @@ module.exports = function (app) {
 
     .post(function (req, res){
       var title = req.body.title;
+      if (title == "") {
+        res.send('missing title')
+        return
+      }
       let newBook = new Book({
         title
       })
@@ -71,7 +75,7 @@ module.exports = function (app) {
       var bookid = req.params.id;
       //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
       Book.find({_id: bookid}, (err, book) => {
-        if (err) res.send("no book exists")
+        if (err || book.length == 0) res.send("no book exists")
         res.send(book[0])
       })
     })
