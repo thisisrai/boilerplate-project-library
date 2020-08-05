@@ -1,4 +1,5 @@
 'use strict';
+require('dotenv').config()
 
 var express     = require('express');
 var bodyParser  = require('body-parser');
@@ -16,6 +17,7 @@ app.use(cors({origin: '*'})); //USED FOR FCC TESTING PURPOSES ONLY!
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(customHeaders);
 
 //Index page (static HTML)
 app.route('/')
@@ -38,7 +40,7 @@ app.use(function(req, res, next) {
 
 //Start our server and tests!
 app.listen(process.env.PORT || 3000, function () {
-  console.log("Listening on port " + process.env.PORT);
+  console.log("Listening on port " + (process.env.PORT || 3000));
   if(process.env.NODE_ENV==='test') {
     console.log('Running Tests...');
     setTimeout(function () {
@@ -52,5 +54,10 @@ app.listen(process.env.PORT || 3000, function () {
     }, 1500);
   }
 });
+
+function customHeaders( req, res, next ){
+  res.setHeader( 'X-Powered-By', 'PHP 4.2.0' );
+  next();
+}
 
 module.exports = app; //for unit/functional testing
